@@ -1,9 +1,12 @@
-import styles from "./App.module.css"
+import styles from "./App.module.css";
+import WeatherWidget from "./components/WeatherWidget/WeatherWidget";
 
 const App = () => {
   return (
-    <div>App</div>
-  )
-}
+    <div className={styles.rootContainer}>
+      <WeatherWidget />
+    </div>
+  );
+};
 
-export default App
+export default App;
