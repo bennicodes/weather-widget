@@ -1,8 +1,14 @@
-import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
+import {
+  faLocationDot,
+  faMagnifyingGlass,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
+import Button from "../Button/Button";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
+import Input from "../Input/Input";
 import Spinner from "../Spinner/Spinner";
+import WeatherItem from "../WeatherItem/WeatherItem";
 import styles from "./WeatherWidget.module.css";
 
 const WeatherWidget = () => {
@@ -62,10 +68,24 @@ const WeatherWidget = () => {
   useEffect(() => {
     formatCurrentDate();
   }, []);
-
   return (
     <div className={styles.weatherWidgetContainer}>
       {isFetchingWeather && <Spinner />}
+      {/* Search section */}
+      <div className={styles.searchContainer}>
+        <Input
+          type="search"
+          placeholder="Enter city name"
+          id="search"
+          className={styles.weatherInput}
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && handleSearchClick()}
+        />
+        <Button className={styles.searchButton} onClick={handleSearchClick}>
+          <FontAwesomeIcon icon={faMagnifyingGlass} />
+        </Button>
+      </div>
       {/* -------------------------- */}
       {error ? (
         <ErrorMessage message={error} />
@@ -102,6 +122,19 @@ const WeatherWidget = () => {
                 {weatherForecastData?.current?.condition.text}
               </p>
             </div>
+          </div>
+          <hr />
+          {/* ---------------- */}
+          <div className={styles}>
+            <h4 className={styles.forecastHeading}>
+              3-Day Temperature Overview
+            </h4>
+            <ul className={styles.forecastContainer}>
+              {weatherForecastData &&
+                weatherForecastData?.forecast?.forecastday?.map((day) => {
+                  return <WeatherItem day={day} key={day.date_epoch} />;
+                })}
+            </ul>
           </div>
         </>
       )}
